@@ -9,7 +9,697 @@ export type Json =
 export type Database = {
   public: {
     Tables: {
-      [_ in never]: never
+      account: {
+        Row: {
+          account_id: string
+          created_at: string | null
+          is_active: boolean | null
+          password_hash: string
+          user_id: string | null
+          username: string
+        }
+        Insert: {
+          account_id: string
+          created_at?: string | null
+          is_active?: boolean | null
+          password_hash: string
+          user_id?: string | null
+          username: string
+        }
+        Update: {
+          account_id?: string
+          created_at?: string | null
+          is_active?: boolean | null
+          password_hash?: string
+          user_id?: string | null
+          username?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "account_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: true
+            referencedRelation: "User"
+            referencedColumns: ["user_id"]
+          },
+        ]
+      }
+      appointments: {
+        Row: {
+          appointment_date: string
+          appointment_time: string
+          created_at: string | null
+          doctor_name: string
+          id: string
+          notes: string | null
+          service_type: string
+          status: string | null
+          updated_at: string | null
+          user_id: string
+        }
+        Insert: {
+          appointment_date: string
+          appointment_time: string
+          created_at?: string | null
+          doctor_name: string
+          id?: string
+          notes?: string | null
+          service_type: string
+          status?: string | null
+          updated_at?: string | null
+          user_id: string
+        }
+        Update: {
+          appointment_date?: string
+          appointment_time?: string
+          created_at?: string | null
+          doctor_name?: string
+          id?: string
+          notes?: string | null
+          service_type?: string
+          status?: string | null
+          updated_at?: string | null
+          user_id?: string
+        }
+        Relationships: []
+      }
+      blog_posts: {
+        Row: {
+          content: string | null
+          created_at: string | null
+          manager_id: string | null
+          post_id: string
+          title: string | null
+        }
+        Insert: {
+          content?: string | null
+          created_at?: string | null
+          manager_id?: string | null
+          post_id: string
+          title?: string | null
+        }
+        Update: {
+          content?: string | null
+          created_at?: string | null
+          manager_id?: string | null
+          post_id?: string
+          title?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "blog_posts_manager_id_fkey"
+            columns: ["manager_id"]
+            isOneToOne: false
+            referencedRelation: "User"
+            referencedColumns: ["user_id"]
+          },
+        ]
+      }
+      booking: {
+        Row: {
+          booking_date: string | null
+          booking_id: string
+          customer_id: string
+          note: string | null
+          service_id: string
+          status: string | null
+          work_id: string
+        }
+        Insert: {
+          booking_date?: string | null
+          booking_id: string
+          customer_id: string
+          note?: string | null
+          service_id: string
+          status?: string | null
+          work_id: string
+        }
+        Update: {
+          booking_date?: string | null
+          booking_id?: string
+          customer_id?: string
+          note?: string | null
+          service_id?: string
+          status?: string | null
+          work_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "booking_customer_id_fkey"
+            columns: ["customer_id"]
+            isOneToOne: false
+            referencedRelation: "User"
+            referencedColumns: ["user_id"]
+          },
+          {
+            foreignKeyName: "booking_service_id_fkey"
+            columns: ["service_id"]
+            isOneToOne: false
+            referencedRelation: "treatment_services"
+            referencedColumns: ["service_id"]
+          },
+          {
+            foreignKeyName: "booking_work_id_fkey"
+            columns: ["work_id"]
+            isOneToOne: false
+            referencedRelation: "workschedule"
+            referencedColumns: ["work_id"]
+          },
+        ]
+      }
+      consultations: {
+        Row: {
+          created_at: string | null
+          id: string
+          message: string
+          response: string | null
+          status: string | null
+          subject: string
+          updated_at: string | null
+          user_id: string
+        }
+        Insert: {
+          created_at?: string | null
+          id?: string
+          message: string
+          response?: string | null
+          status?: string | null
+          subject: string
+          updated_at?: string | null
+          user_id: string
+        }
+        Update: {
+          created_at?: string | null
+          id?: string
+          message?: string
+          response?: string | null
+          status?: string | null
+          subject?: string
+          updated_at?: string | null
+          user_id?: string
+        }
+        Relationships: []
+      }
+      examination: {
+        Row: {
+          booking_id: string
+          diagnosis: string | null
+          exam_date: string | null
+          exam_id: string
+          recommendation: string | null
+        }
+        Insert: {
+          booking_id: string
+          diagnosis?: string | null
+          exam_date?: string | null
+          exam_id: string
+          recommendation?: string | null
+        }
+        Update: {
+          booking_id?: string
+          diagnosis?: string | null
+          exam_date?: string | null
+          exam_id?: string
+          recommendation?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "examination_booking_id_fkey"
+            columns: ["booking_id"]
+            isOneToOne: true
+            referencedRelation: "booking"
+            referencedColumns: ["booking_id"]
+          },
+        ]
+      }
+      feedback_ratings: {
+        Row: {
+          comment: string | null
+          created_at: string | null
+          customer_id: string | null
+          feedback_id: string
+          rating: number | null
+          staff_id: string | null
+        }
+        Insert: {
+          comment?: string | null
+          created_at?: string | null
+          customer_id?: string | null
+          feedback_id: string
+          rating?: number | null
+          staff_id?: string | null
+        }
+        Update: {
+          comment?: string | null
+          created_at?: string | null
+          customer_id?: string | null
+          feedback_id?: string
+          rating?: number | null
+          staff_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "feedback_ratings_customer_id_fkey"
+            columns: ["customer_id"]
+            isOneToOne: false
+            referencedRelation: "User"
+            referencedColumns: ["user_id"]
+          },
+          {
+            foreignKeyName: "feedback_ratings_staff_id_fkey"
+            columns: ["staff_id"]
+            isOneToOne: false
+            referencedRelation: "User"
+            referencedColumns: ["user_id"]
+          },
+        ]
+      }
+      invoice: {
+        Row: {
+          booking_id: string | null
+          invoice_id: string
+          issued_date: string | null
+          status: string | null
+          total_amount: number | null
+        }
+        Insert: {
+          booking_id?: string | null
+          invoice_id: string
+          issued_date?: string | null
+          status?: string | null
+          total_amount?: number | null
+        }
+        Update: {
+          booking_id?: string | null
+          invoice_id?: string
+          issued_date?: string | null
+          status?: string | null
+          total_amount?: number | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "invoice_booking_id_fkey"
+            columns: ["booking_id"]
+            isOneToOne: true
+            referencedRelation: "booking"
+            referencedColumns: ["booking_id"]
+          },
+        ]
+      }
+      medical_results: {
+        Row: {
+          exam_id: string
+          result_date: string | null
+          result_id: string
+          result_value: string | null
+          staff_id: string | null
+          test_name: string | null
+        }
+        Insert: {
+          exam_id: string
+          result_date?: string | null
+          result_id: string
+          result_value?: string | null
+          staff_id?: string | null
+          test_name?: string | null
+        }
+        Update: {
+          exam_id?: string
+          result_date?: string | null
+          result_id?: string
+          result_value?: string | null
+          staff_id?: string | null
+          test_name?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "medical_results_exam_id_fkey"
+            columns: ["exam_id"]
+            isOneToOne: false
+            referencedRelation: "examination"
+            referencedColumns: ["exam_id"]
+          },
+          {
+            foreignKeyName: "medical_results_staff_id_fkey"
+            columns: ["staff_id"]
+            isOneToOne: false
+            referencedRelation: "User"
+            referencedColumns: ["user_id"]
+          },
+        ]
+      }
+      notification: {
+        Row: {
+          content: string | null
+          is_read: boolean | null
+          notification_id: string
+          progress_id: string
+          sent_at: string | null
+        }
+        Insert: {
+          content?: string | null
+          is_read?: boolean | null
+          notification_id: string
+          progress_id: string
+          sent_at?: string | null
+        }
+        Update: {
+          content?: string | null
+          is_read?: boolean | null
+          notification_id?: string
+          progress_id?: string
+          sent_at?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "notification_progress_id_fkey"
+            columns: ["progress_id"]
+            isOneToOne: false
+            referencedRelation: "treatment_progress"
+            referencedColumns: ["progress_id"]
+          },
+        ]
+      }
+      payment: {
+        Row: {
+          invoice_id: string | null
+          method: string | null
+          paid_amount: number | null
+          paid_at: string | null
+          payment_id: string
+        }
+        Insert: {
+          invoice_id?: string | null
+          method?: string | null
+          paid_amount?: number | null
+          paid_at?: string | null
+          payment_id: string
+        }
+        Update: {
+          invoice_id?: string | null
+          method?: string | null
+          paid_amount?: number | null
+          paid_at?: string | null
+          payment_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "payment_invoice_id_fkey"
+            columns: ["invoice_id"]
+            isOneToOne: true
+            referencedRelation: "invoice"
+            referencedColumns: ["invoice_id"]
+          },
+        ]
+      }
+      prescription: {
+        Row: {
+          dosage: string | null
+          medicine_name: string | null
+          prescription_id: string
+          result_id: string | null
+          usage_instruction: string | null
+        }
+        Insert: {
+          dosage?: string | null
+          medicine_name?: string | null
+          prescription_id: string
+          result_id?: string | null
+          usage_instruction?: string | null
+        }
+        Update: {
+          dosage?: string | null
+          medicine_name?: string | null
+          prescription_id?: string
+          result_id?: string | null
+          usage_instruction?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "prescription_result_id_fkey"
+            columns: ["result_id"]
+            isOneToOne: true
+            referencedRelation: "medical_results"
+            referencedColumns: ["result_id"]
+          },
+        ]
+      }
+      profiles: {
+        Row: {
+          age: number | null
+          created_at: string | null
+          email: string | null
+          full_name: string | null
+          id: string
+          phone: string | null
+          updated_at: string | null
+        }
+        Insert: {
+          age?: number | null
+          created_at?: string | null
+          email?: string | null
+          full_name?: string | null
+          id: string
+          phone?: string | null
+          updated_at?: string | null
+        }
+        Update: {
+          age?: number | null
+          created_at?: string | null
+          email?: string | null
+          full_name?: string | null
+          id?: string
+          phone?: string | null
+          updated_at?: string | null
+        }
+        Relationships: []
+      }
+      role: {
+        Row: {
+          role_id: number
+          role_name: string
+        }
+        Insert: {
+          role_id?: never
+          role_name: string
+        }
+        Update: {
+          role_id?: never
+          role_name?: string
+        }
+        Relationships: []
+      }
+      treatment_progress: {
+        Row: {
+          activity: string | null
+          doctor_note: string | null
+          progress_date: string | null
+          progress_id: string
+          schedule_id: string | null
+          status: string | null
+        }
+        Insert: {
+          activity?: string | null
+          doctor_note?: string | null
+          progress_date?: string | null
+          progress_id: string
+          schedule_id?: string | null
+          status?: string | null
+        }
+        Update: {
+          activity?: string | null
+          doctor_note?: string | null
+          progress_date?: string | null
+          progress_id?: string
+          schedule_id?: string | null
+          status?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "treatment_progress_schedule_id_fkey"
+            columns: ["schedule_id"]
+            isOneToOne: false
+            referencedRelation: "treatment_schedules"
+            referencedColumns: ["schedule_id"]
+          },
+        ]
+      }
+      treatment_record: {
+        Row: {
+          customer_id: string | null
+          record_id: string
+          result_id: string | null
+        }
+        Insert: {
+          customer_id?: string | null
+          record_id: string
+          result_id?: string | null
+        }
+        Update: {
+          customer_id?: string | null
+          record_id?: string
+          result_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "treatment_record_customer_id_fkey"
+            columns: ["customer_id"]
+            isOneToOne: false
+            referencedRelation: "User"
+            referencedColumns: ["user_id"]
+          },
+          {
+            foreignKeyName: "treatment_record_result_id_fkey"
+            columns: ["result_id"]
+            isOneToOne: false
+            referencedRelation: "medical_results"
+            referencedColumns: ["result_id"]
+          },
+        ]
+      }
+      treatment_schedules: {
+        Row: {
+          end_date: string | null
+          notes: string | null
+          result_id: string | null
+          schedule_id: string
+          start_date: string | null
+          status: string | null
+        }
+        Insert: {
+          end_date?: string | null
+          notes?: string | null
+          result_id?: string | null
+          schedule_id: string
+          start_date?: string | null
+          status?: string | null
+        }
+        Update: {
+          end_date?: string | null
+          notes?: string | null
+          result_id?: string | null
+          schedule_id?: string
+          start_date?: string | null
+          status?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "treatment_schedules_result_id_fkey"
+            columns: ["result_id"]
+            isOneToOne: false
+            referencedRelation: "medical_results"
+            referencedColumns: ["result_id"]
+          },
+        ]
+      }
+      treatment_services: {
+        Row: {
+          description: string | null
+          duration_days: number | null
+          fee: number | null
+          name: string | null
+          service_id: string
+          type: string | null
+          user_id: string | null
+        }
+        Insert: {
+          description?: string | null
+          duration_days?: number | null
+          fee?: number | null
+          name?: string | null
+          service_id: string
+          type?: string | null
+          user_id?: string | null
+        }
+        Update: {
+          description?: string | null
+          duration_days?: number | null
+          fee?: number | null
+          name?: string | null
+          service_id?: string
+          type?: string | null
+          user_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "treatment_services_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "User"
+            referencedColumns: ["user_id"]
+          },
+        ]
+      }
+      User: {
+        Row: {
+          address: string | null
+          date_of_birth: string | null
+          email: string | null
+          full_name: string | null
+          gender: string | null
+          phone: string | null
+          role_id: number | null
+          user_id: string
+        }
+        Insert: {
+          address?: string | null
+          date_of_birth?: string | null
+          email?: string | null
+          full_name?: string | null
+          gender?: string | null
+          phone?: string | null
+          role_id?: number | null
+          user_id: string
+        }
+        Update: {
+          address?: string | null
+          date_of_birth?: string | null
+          email?: string | null
+          full_name?: string | null
+          gender?: string | null
+          phone?: string | null
+          role_id?: number | null
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "User_role_id_fkey"
+            columns: ["role_id"]
+            isOneToOne: false
+            referencedRelation: "role"
+            referencedColumns: ["role_id"]
+          },
+        ]
+      }
+      workschedule: {
+        Row: {
+          doctor_id: string
+          shift: string | null
+          work_date: string | null
+          work_id: string
+        }
+        Insert: {
+          doctor_id: string
+          shift?: string | null
+          work_date?: string | null
+          work_id: string
+        }
+        Update: {
+          doctor_id?: string
+          shift?: string | null
+          work_date?: string | null
+          work_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "workschedule_doctor_id_fkey"
+            columns: ["doctor_id"]
+            isOneToOne: false
+            referencedRelation: "User"
+            referencedColumns: ["user_id"]
+          },
+        ]
+      }
     }
     Views: {
       [_ in never]: never

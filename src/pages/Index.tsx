@@ -1,10 +1,18 @@
 
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { Heart, Users, Stethoscope, Calendar, Award, PhoneCall } from "lucide-react";
-import { Link } from "react-router-dom";
+import { Heart, Users, Stethoscope, Calendar, Award, PhoneCall, User, LogOut } from "lucide-react";
+import { Link, useNavigate } from "react-router-dom";
+import { useAuth } from "@/hooks/useAuth";
 
 const Index = () => {
+  const { user, signOut } = useAuth();
+  const navigate = useNavigate();
+
+  const handleSignOut = async () => {
+    await signOut();
+  };
+
   return (
     <div className="min-h-screen bg-gradient-to-b from-pink-50 to-white">
       {/* Header */}
@@ -21,10 +29,24 @@ const Index = () => {
               <Link to="/doctors" className="text-gray-600 hover:text-pink-600 transition-colors">Bác sĩ</Link>
               <Link to="/dashboard" className="text-gray-600 hover:text-pink-600 transition-colors">Dashboard</Link>
             </nav>
-            <Button className="bg-pink-600 hover:bg-pink-700">
-              <PhoneCall className="w-4 h-4 mr-2" />
-              Đặt lịch hẹn
-            </Button>
+            <div className="flex items-center space-x-4">
+              {user ? (
+                <>
+                  <Button variant="outline" onClick={() => navigate("/profile")}>
+                    <User className="w-4 h-4 mr-2" />
+                    {user.email}
+                  </Button>
+                  <Button variant="ghost" onClick={handleSignOut}>
+                    <LogOut className="w-4 h-4" />
+                  </Button>
+                </>
+              ) : (
+                <Button onClick={() => navigate("/auth")} className="bg-pink-600 hover:bg-pink-700">
+                  <User className="w-4 h-4 mr-2" />
+                  Đăng nhập
+                </Button>
+              )}
+            </div>
           </div>
         </div>
       </header>
@@ -40,11 +62,12 @@ const Index = () => {
             Chúng tôi đồng hành cùng bạn trên hành trình tìm kiếm hạnh phúc làm cha mẹ với các phương pháp điều trị hiếm muộn tiên tiến nhất.
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <Button size="lg" className="bg-pink-600 hover:bg-pink-700">
+            <Button size="lg" className="bg-pink-600 hover:bg-pink-700" onClick={() => navigate("/consultation")}>
               Tư vấn miễn phí
             </Button>
-            <Button size="lg" variant="outline">
-              Tìm hiểu thêm
+            <Button size="lg" variant="outline" onClick={() => navigate("/booking")}>
+              <PhoneCall className="w-4 h-4 mr-2" />
+              Đặt lịch hẹn
             </Button>
           </div>
         </div>
@@ -153,7 +176,7 @@ const Index = () => {
           <p className="text-xl mb-8 opacity-90">
             Liên hệ với chúng tôi để được tư vấn miễn phí và lập kế hoạch điều trị phù hợp
           </p>
-          <Button size="lg" variant="secondary" className="bg-white text-pink-600 hover:bg-gray-100">
+          <Button size="lg" variant="secondary" className="bg-white text-pink-600 hover:bg-gray-100" onClick={() => navigate("/booking")}>
             Đặt lịch tư vấn ngay
           </Button>
         </div>
