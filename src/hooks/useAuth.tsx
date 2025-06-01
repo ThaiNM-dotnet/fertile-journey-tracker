@@ -44,14 +44,18 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     const redirectUrl = `${window.location.origin}/`;
     
     // First check if username already exists
-    const { data: existingUser } = await supabase
-      .from('profiles')
-      .select('username')
-      .eq('username', username)
-      .single();
+    try {
+      const { data: existingUser } = await supabase
+        .from('profiles')
+        .select('username')
+        .eq('username', username)
+        .single();
 
-    if (existingUser) {
-      return { error: { message: 'Tên tài khoản đã tồn tại' } };
+      if (existingUser) {
+        return { error: { message: 'Tên tài khoản đã tồn tại' } };
+      }
+    } catch (error) {
+      // If no user found, that's good - continue with signup
     }
     
     const { error } = await supabase.auth.signUp({
@@ -74,17 +78,21 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     
     if (!usernameOrEmail.includes('@')) {
       // It's a username, find the corresponding email
-      const { data: profile } = await supabase
-        .from('profiles')
-        .select('email')
-        .eq('username', usernameOrEmail)
-        .single();
-      
-      if (!profile) {
+      try {
+        const { data: profile } = await supabase
+          .from('profiles')
+          .select('email')
+          .eq('username', usernameOrEmail)
+          .single();
+        
+        if (!profile || !profile.email) {
+          return { error: { message: 'Tên tài khoản không tồn tại' } };
+        }
+        
+        email = profile.email;
+      } catch (error) {
         return { error: { message: 'Tên tài khoản không tồn tại' } };
       }
-      
-      email = profile.email;
     }
 
     const { error } = await supabase.auth.signInWithPassword({
