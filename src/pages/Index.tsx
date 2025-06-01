@@ -1,166 +1,226 @@
-import { useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { Heart, Users, Baby } from "lucide-react";
+import { Heart, Users, Stethoscope, Calendar, Award, PhoneCall, User, LogOut } from "lucide-react";
+import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "@/hooks/useAuth";
-import { NotificationBell } from "@/components/NotificationBell";
 
 const Index = () => {
   const { user, signOut } = useAuth();
   const navigate = useNavigate();
 
-  useEffect(() => {
-    document.title = "IVF Care Center - Trang chủ";
-  }, []);
+  const handleSignOut = async () => {
+    await signOut();
+  };
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-pink-50 to-white">
-      {/* Navigation */}
-      <nav className="bg-white shadow-sm border-b border-pink-100">
-        <div className="container mx-auto px-6 py-4">
-          <div className="flex justify-between items-center">
-            <div className="flex items-center">
-              <Heart className="h-8 w-8 text-pink-600 mr-3" />
-              <span className="text-xl font-bold text-gray-800">IVF Care Center</span>
+      {/* Header */}
+      <header className="bg-white shadow-sm border-b">
+        <div className="container mx-auto px-4 py-4">
+          <div className="flex items-center justify-between">
+            <div className="flex items-center space-x-2">
+              <Heart className="h-8 w-8 text-pink-600" />
+              <h1 className="text-2xl font-bold text-gray-800">FertilityCare</h1>
             </div>
+            <nav className="hidden md:flex space-x-6">
+              <Link to="/" className="text-gray-600 hover:text-pink-600 transition-colors">Trang chủ</Link>
+              <Link to="/services" className="text-gray-600 hover:text-pink-600 transition-colors">Dịch vụ</Link>
+              <Link to="/doctors" className="text-gray-600 hover:text-pink-600 transition-colors">Bác sĩ</Link>
+              <Link to="/dashboard" className="text-gray-600 hover:text-pink-600 transition-colors">Dashboard</Link>
+            </nav>
             <div className="flex items-center space-x-4">
               {user ? (
                 <>
-                  <NotificationBell />
-                  <span className="text-gray-600">Xin chào, {user.email}</span>
-                  <Button onClick={signOut} variant="outline">
-                    Đăng xuất
+                  <Button variant="outline" onClick={() => navigate("/profile")}>
+                    <User className="w-4 h-4 mr-2" />
+                    {user.email}
+                  </Button>
+                  <Button variant="ghost" onClick={handleSignOut}>
+                    <LogOut className="w-4 h-4" />
                   </Button>
                 </>
               ) : (
                 <Button onClick={() => navigate("/auth")} className="bg-pink-600 hover:bg-pink-700">
+                  <User className="w-4 h-4 mr-2" />
                   Đăng nhập
                 </Button>
               )}
             </div>
           </div>
         </div>
-      </nav>
+      </header>
 
       {/* Hero Section */}
-      <section className="py-20">
-        <div className="container mx-auto px-6 text-center">
-          <h1 className="text-4xl font-bold text-gray-800 mb-8">
-            Chào mừng đến với IVF Care Center
-          </h1>
-          <p className="text-lg text-gray-600 mb-12">
-            Chúng tôi cam kết mang đến dịch vụ chăm sóc sức khỏe sinh sản tốt nhất
+      <section className="py-20 px-4">
+        <div className="container mx-auto text-center">
+          <h2 className="text-5xl font-bold text-gray-800 mb-6">
+            Chăm sóc sức khỏe sinh sản
+            <span className="block text-pink-600">Với tình yêu thương</span>
+          </h2>
+          <p className="text-xl text-gray-600 mb-8 max-w-2xl mx-auto">
+            Chúng tôi đồng hành cùng bạn trên hành trình tìm kiếm hạnh phúc làm cha mẹ với các phương pháp điều trị hiếm muộn tiên tiến nhất.
           </p>
-          <Button onClick={() => navigate("/booking")} className="bg-pink-600 hover:bg-pink-700">
-            Đặt lịch hẹn ngay
-          </Button>
+          <div className="flex flex-col sm:flex-row gap-4 justify-center">
+            <Button size="lg" className="bg-pink-600 hover:bg-pink-700" onClick={() => navigate("/consultation")}>
+              Tư vấn miễn phí
+            </Button>
+            <Button size="lg" variant="outline" onClick={() => navigate("/booking")}>
+              <PhoneCall className="w-4 h-4 mr-2" />
+              Đặt lịch hẹn
+            </Button>
+          </div>
         </div>
       </section>
 
       {/* Services Section */}
-      <section className="py-16 bg-white">
-        <div className="container mx-auto px-6">
-          <div className="text-center mb-12">
-            <h2 className="text-3xl font-bold text-gray-800 mb-4">Dịch vụ của chúng tôi</h2>
-            <p className="text-gray-600 max-w-2xl mx-auto">
-              Chúng tôi cung cấp các dịch vụ chăm sóc sức khỏe sinh sản toàn diện
-            </p>
-          </div>
-          
+      <section className="py-16 px-4 bg-white">
+        <div className="container mx-auto">
+          <h3 className="text-3xl font-bold text-center mb-12 text-gray-800">
+            Dịch vụ điều trị hiếm muộn
+          </h3>
           <div className="grid md:grid-cols-3 gap-8">
-            {[
-              {
-                icon: Users,
-                title: "Tư vấn chuyên khoa",
-                description: "Đội ngũ bác sĩ giàu kinh nghiệm tư vấn và hỗ trợ",
-                price: "500,000đ"
-              },
-              {
-                icon: Heart,
-                title: "IUI - Thụ tinh nhân tạo",
-                description: "Phương pháp hỗ trợ sinh sản hiệu quả và an toàn",
-                price: "15,000,000đ"
-              },
-              {
-                icon: Baby,
-                title: "IVF - Thụ tinh trong ống nghiệm",
-                description: "Công nghệ hiện đại giúp hiện thực hóa ước mơ làm cha mẹ",
-                price: "80,000,000đ"
-              }
-            ].map((service, index) => (
-              <Card key={index} className="hover:shadow-lg transition-shadow">
-                <CardHeader>
-                  <service.icon className="h-12 w-12 text-pink-600 mb-4" />
-                  <CardTitle className="text-xl">{service.title}</CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <p className="text-gray-600 mb-4">{service.description}</p>
-                  <div className="flex justify-between items-center">
-                    <p className="text-lg font-bold text-pink-600">{service.price}</p>
-                    <Button 
-                      size="sm" 
-                      onClick={() => navigate("/payment")}
-                      className="bg-pink-600 hover:bg-pink-700"
-                    >
-                      Thanh toán
-                    </Button>
-                  </div>
-                </CardContent>
-              </Card>
-            ))}
+            <Card className="hover:shadow-lg transition-shadow">
+              <CardHeader>
+                <CardTitle className="flex items-center text-pink-600">
+                  <Heart className="w-6 h-6 mr-2" />
+                  IUI - Thụ tinh trong tử cung
+                </CardTitle>
+              </CardHeader>
+              <CardContent>
+                <CardDescription className="text-gray-600">
+                  Phương pháp đưa tinh trùng đã được xử lý trực tiếp vào tử cung để tăng khả năng thụ thai tự nhiên.
+                </CardDescription>
+              </CardContent>
+            </Card>
+
+            <Card className="hover:shadow-lg transition-shadow">
+              <CardHeader>
+                <CardTitle className="flex items-center text-pink-600">
+                  <Stethoscope className="w-6 h-6 mr-2" />
+                  IVF - Thụ tinh trong ống nghiệm
+                </CardTitle>
+              </CardHeader>
+              <CardContent>
+                <CardDescription className="text-gray-600">
+                  Kỹ thuật thụ tinh ngoài cơ thể, sau đó chuyển phôi về tử cung với tỷ lệ thành công cao.
+                </CardDescription>
+              </CardContent>
+            </Card>
+
+            <Card className="hover:shadow-lg transition-shadow">
+              <CardHeader>
+                <CardTitle className="flex items-center text-pink-600">
+                  <Users className="w-6 h-6 mr-2" />
+                  Tư vấn chuyên sâu
+                </CardTitle>
+              </CardHeader>
+              <CardContent>
+                <CardDescription className="text-gray-600">
+                  Đội ngũ bác sĩ chuyên khoa sinh sản tư vấn và đưa ra phương án điều trị phù hợp nhất.
+                </CardDescription>
+              </CardContent>
+            </Card>
           </div>
         </div>
       </section>
 
-      {/* Why Choose Us Section */}
-      <section className="py-16 bg-pink-50">
-        <div className="container mx-auto px-6">
-          <div className="text-center mb-12">
-            <h2 className="text-3xl font-bold text-gray-800 mb-4">
-              Tại sao chọn chúng tôi?
-            </h2>
-            <p className="text-gray-600 max-w-2xl mx-auto">
-              Chúng tôi tự hào là trung tâm hàng đầu về chăm sóc sức khỏe sinh sản
-            </p>
-          </div>
-
+      {/* Features Section */}
+      <section className="py-16 px-4 bg-pink-50">
+        <div className="container mx-auto">
+          <h3 className="text-3xl font-bold text-center mb-12 text-gray-800">
+            Tại sao chọn chúng tôi?
+          </h3>
           <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
-            {[
-              {
-                title: "Đội ngũ chuyên gia",
-                description: "Các bác sĩ và chuyên gia hàng đầu trong lĩnh vực",
-              },
-              {
-                title: "Công nghệ tiên tiến",
-                description: "Sử dụng các phương pháp và thiết bị hiện đại nhất",
-              },
-              {
-                title: "Chăm sóc tận tâm",
-                description: "Luôn lắng nghe và đồng hành cùng bạn trên hành trình",
-              },
-              {
-                title: "Tỷ lệ thành công cao",
-                description: "Đạt được tỷ lệ thành công hàng đầu trong khu vực",
-              },
-            ].map((feature, index) => (
-              <div key={index} className="text-center">
-                <h3 className="text-xl font-bold text-gray-800 mb-2">
-                  {feature.title}
-                </h3>
-                <p className="text-gray-600">{feature.description}</p>
+            <div className="text-center">
+              <div className="bg-pink-100 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4">
+                <Award className="w-8 h-8 text-pink-600" />
               </div>
-            ))}
+              <h4 className="font-semibold text-gray-800 mb-2">Đội ngũ chuyên gia</h4>
+              <p className="text-gray-600">Bác sĩ giàu kinh nghiệm với trình độ chuyên môn cao</p>
+            </div>
+
+            <div className="text-center">
+              <div className="bg-pink-100 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4">
+                <Stethoscope className="w-8 h-8 text-pink-600" />
+              </div>
+              <h4 className="font-semibold text-gray-800 mb-2">Công nghệ tiên tiến</h4>
+              <p className="text-gray-600">Trang thiết bị y tế hiện đại và kỹ thuật mới nhất</p>
+            </div>
+
+            <div className="text-center">
+              <div className="bg-pink-100 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4">
+                <Calendar className="w-8 h-8 text-pink-600" />
+              </div>
+              <h4 className="font-semibold text-gray-800 mb-2">Theo dõi liên tục</h4>
+              <p className="text-gray-600">Hệ thống quản lý và nhắc nhở lịch trình chi tiết</p>
+            </div>
+
+            <div className="text-center">
+              <div className="bg-pink-100 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4">
+                <Heart className="w-8 h-8 text-pink-600" />
+              </div>
+              <h4 className="font-semibold text-gray-800 mb-2">Chăm sóc tận tâm</h4>
+              <p className="text-gray-600">Đồng hành và hỗ trợ suốt quá trình điều trị</p>
+            </div>
           </div>
+        </div>
+      </section>
+
+      {/* CTA Section */}
+      <section className="py-16 px-4 bg-pink-600 text-white">
+        <div className="container mx-auto text-center">
+          <h3 className="text-3xl font-bold mb-4">
+            Bắt đầu hành trình của bạn ngay hôm nay
+          </h3>
+          <p className="text-xl mb-8 opacity-90">
+            Liên hệ với chúng tôi để được tư vấn miễn phí và lập kế hoạch điều trị phù hợp
+          </p>
+          <Button size="lg" variant="secondary" className="bg-white text-pink-600 hover:bg-gray-100" onClick={() => navigate("/booking")}>
+            Đặt lịch tư vấn ngay
+          </Button>
         </div>
       </section>
 
       {/* Footer */}
-      <footer className="bg-gray-100 py-8 border-t border-pink-100">
-        <div className="container mx-auto px-6 text-center">
-          <p className="text-gray-500">
-            &copy; 2024 IVF Care Center. All rights reserved.
-          </p>
+      <footer className="bg-gray-800 text-white py-12 px-4">
+        <div className="container mx-auto">
+          <div className="grid md:grid-cols-4 gap-8">
+            <div>
+              <div className="flex items-center space-x-2 mb-4">
+                <Heart className="h-6 w-6 text-pink-400" />
+                <h4 className="text-xl font-bold">FertilityCare</h4>
+              </div>
+              <p className="text-gray-400">
+                Trung tâm điều trị hiếm muộn hàng đầu với đội ngũ chuyên gia giàu kinh nghiệm.
+              </p>
+            </div>
+            <div>
+              <h5 className="font-semibold mb-4">Dịch vụ</h5>
+              <ul className="space-y-2 text-gray-400">
+                <li>IUI - Thụ tinh trong tử cung</li>
+                <li>IVF - Thụ tinh trong ống nghiệm</li>
+                <li>Tư vấn sinh sản</li>
+                <li>Xét nghiệm chuyên khoa</li>
+              </ul>
+            </div>
+            <div>
+              <h5 className="font-semibold mb-4">Liên hệ</h5>
+              <ul className="space-y-2 text-gray-400">
+                <li>📞 1900 1234</li>
+                <li>📧 info@fertilitycare.vn</li>
+                <li>📍 123 Đường ABC, Quận 1, TP.HCM</li>
+              </ul>
+            </div>
+            <div>
+              <h5 className="font-semibold mb-4">Giờ làm việc</h5>
+              <ul className="space-y-2 text-gray-400">
+                <li>Thứ 2 - Thứ 6: 8:00 - 17:00</li>
+                <li>Thứ 7: 8:00 - 12:00</li>
+                <li>Chủ nhật: Nghỉ</li>
+              </ul>
+            </div>
+          </div>
         </div>
       </footer>
     </div>
