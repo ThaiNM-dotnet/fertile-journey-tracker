@@ -52,6 +52,7 @@ export type Database = {
           doctor_name: string
           id: string
           notes: string | null
+          payment_id: string | null
           service_type: string
           status: string | null
           updated_at: string | null
@@ -64,6 +65,7 @@ export type Database = {
           doctor_name: string
           id?: string
           notes?: string | null
+          payment_id?: string | null
           service_type: string
           status?: string | null
           updated_at?: string | null
@@ -76,12 +78,21 @@ export type Database = {
           doctor_name?: string
           id?: string
           notes?: string | null
+          payment_id?: string | null
           service_type?: string
           status?: string | null
           updated_at?: string | null
           user_id?: string
         }
-        Relationships: []
+        Relationships: [
+          {
+            foreignKeyName: "appointments_payment_id_fkey"
+            columns: ["payment_id"]
+            isOneToOne: false
+            referencedRelation: "payments"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       blog_posts: {
         Row: {
@@ -380,6 +391,39 @@ export type Database = {
           },
         ]
       }
+      notifications: {
+        Row: {
+          created_at: string | null
+          data: Json | null
+          id: string
+          is_read: boolean | null
+          message: string
+          title: string
+          type: string | null
+          user_id: string
+        }
+        Insert: {
+          created_at?: string | null
+          data?: Json | null
+          id?: string
+          is_read?: boolean | null
+          message: string
+          title: string
+          type?: string | null
+          user_id: string
+        }
+        Update: {
+          created_at?: string | null
+          data?: Json | null
+          id?: string
+          is_read?: boolean | null
+          message?: string
+          title?: string
+          type?: string | null
+          user_id?: string
+        }
+        Relationships: []
+      }
       payment: {
         Row: {
           invoice_id: string | null
@@ -409,6 +453,59 @@ export type Database = {
             isOneToOne: true
             referencedRelation: "invoice"
             referencedColumns: ["invoice_id"]
+          },
+        ]
+      }
+      payments: {
+        Row: {
+          amount: number
+          appointment_id: string | null
+          created_at: string | null
+          currency: string
+          id: string
+          payment_method: string | null
+          payment_status: string | null
+          stripe_payment_intent_id: string | null
+          stripe_session_id: string | null
+          transaction_id: string | null
+          updated_at: string | null
+          user_id: string
+        }
+        Insert: {
+          amount: number
+          appointment_id?: string | null
+          created_at?: string | null
+          currency?: string
+          id?: string
+          payment_method?: string | null
+          payment_status?: string | null
+          stripe_payment_intent_id?: string | null
+          stripe_session_id?: string | null
+          transaction_id?: string | null
+          updated_at?: string | null
+          user_id: string
+        }
+        Update: {
+          amount?: number
+          appointment_id?: string | null
+          created_at?: string | null
+          currency?: string
+          id?: string
+          payment_method?: string | null
+          payment_status?: string | null
+          stripe_payment_intent_id?: string | null
+          stripe_session_id?: string | null
+          transaction_id?: string | null
+          updated_at?: string | null
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "payments_appointment_id_fkey"
+            columns: ["appointment_id"]
+            isOneToOne: false
+            referencedRelation: "appointments"
+            referencedColumns: ["id"]
           },
         ]
       }
@@ -486,6 +583,39 @@ export type Database = {
         Update: {
           role_id?: never
           role_name?: string
+        }
+        Relationships: []
+      }
+      service_prices: {
+        Row: {
+          created_at: string | null
+          currency: string
+          description: string | null
+          id: string
+          is_active: boolean | null
+          price: number
+          service_name: string
+          updated_at: string | null
+        }
+        Insert: {
+          created_at?: string | null
+          currency?: string
+          description?: string | null
+          id?: string
+          is_active?: boolean | null
+          price: number
+          service_name: string
+          updated_at?: string | null
+        }
+        Update: {
+          created_at?: string | null
+          currency?: string
+          description?: string | null
+          id?: string
+          is_active?: boolean | null
+          price?: number
+          service_name?: string
+          updated_at?: string | null
         }
         Relationships: []
       }

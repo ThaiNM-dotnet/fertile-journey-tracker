@@ -11,10 +11,12 @@ import { useAuth } from "@/hooks/useAuth";
 import { useToast } from "@/hooks/use-toast";
 
 const Auth = () => {
+  const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [fullName, setFullName] = useState("");
   const [phone, setPhone] = useState("");
+  const [usernameOrEmail, setUsernameOrEmail] = useState("");
   const [loading, setLoading] = useState(false);
   const { signIn, signUp } = useAuth();
   const { toast } = useToast();
@@ -24,12 +26,14 @@ const Auth = () => {
     e.preventDefault();
     setLoading(true);
     
-    const { error } = await signIn(email, password);
+    const { error } = await signIn(usernameOrEmail, password);
     
     if (error) {
       toast({
         title: "Lỗi đăng nhập",
-        description: error.message === "Invalid login credentials" ? "Email hoặc mật khẩu không đúng" : error.message,
+        description: error.message === "Invalid login credentials" 
+          ? "Tên tài khoản/email hoặc mật khẩu không đúng" 
+          : error.message,
         variant: "destructive"
       });
     } else {
@@ -47,12 +51,24 @@ const Auth = () => {
     e.preventDefault();
     setLoading(true);
     
-    const { error } = await signUp(email, password, fullName);
+    if (!username || !email) {
+      toast({
+        title: "Lỗi đăng ký",
+        description: "Vui lòng điền đầy đủ thông tin",
+        variant: "destructive"
+      });
+      setLoading(false);
+      return;
+    }
+    
+    const { error } = await signUp(username, email, password, fullName);
     
     if (error) {
       toast({
         title: "Lỗi đăng ký",
-        description: error.message === "User already registered" ? "Email này đã được đăng ký" : error.message,
+        description: error.message === "User already registered" 
+          ? "Email này đã được đăng ký" 
+          : error.message,
         variant: "destructive"
       });
     } else {
@@ -84,18 +100,19 @@ const Auth = () => {
               <CardHeader>
                 <CardTitle>Đăng nhập</CardTitle>
                 <CardDescription>
-                  Nhập thông tin để đăng nhập vào tài khoản của bạn
+                  Nhập tên tài khoản hoặc email để đăng nhập
                 </CardDescription>
               </CardHeader>
               <CardContent>
                 <form onSubmit={handleSignIn} className="space-y-4">
                   <div className="space-y-2">
-                    <Label htmlFor="signin-email">Email</Label>
+                    <Label htmlFor="signin-username">Tên tài khoản hoặc Email</Label>
                     <Input
-                      id="signin-email"
-                      type="email"
-                      value={email}
-                      onChange={(e) => setEmail(e.target.value)}
+                      id="signin-username"
+                      type="text"
+                      placeholder="username hoặc email@example.com"
+                      value={usernameOrEmail}
+                      onChange={(e) => setUsernameOrEmail(e.target.value)}
                       required
                     />
                   </div>
@@ -127,6 +144,17 @@ const Auth = () => {
               </CardHeader>
               <CardContent>
                 <form onSubmit={handleSignUp} className="space-y-4">
+                  <div className="space-y-2">
+                    <Label htmlFor="signup-username">Tên tài khoản</Label>
+                    <Input
+                      id="signup-username"
+                      type="text"
+                      placeholder="username"
+                      value={username}
+                      onChange={(e) => setUsername(e.target.value)}
+                      required
+                    />
+                  </div>
                   <div className="space-y-2">
                     <Label htmlFor="signup-name">Họ và tên</Label>
                     <Input

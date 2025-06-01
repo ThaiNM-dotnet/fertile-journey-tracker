@@ -7,8 +7,8 @@ interface AuthContextType {
   user: User | null;
   session: Session | null;
   loading: boolean;
-  signUp: (email: string, password: string, fullName: string) => Promise<{ error: any }>;
-  signIn: (email: string, password: string) => Promise<{ error: any }>;
+  signUp: (username: string, email: string, password: string, fullName: string) => Promise<{ error: any }>;
+  signIn: (usernameOrEmail: string, password: string) => Promise<{ error: any }>;
   signOut: () => Promise<void>;
 }
 
@@ -40,8 +40,19 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     return () => subscription.unsubscribe();
   }, []);
 
-  const signUp = async (email: string, password: string, fullName: string) => {
+  const signUp = async (username: string, email: string, password: string, fullName: string) => {
     const redirectUrl = `${window.location.origin}/`;
+    
+    // First check if username already exists
+    const { data: existingUser } = await supabase
+      .from('profiles')
+      .select('username')
+      .eq('username', username)
+      .single();
+
+    if (existingUser) {
+      return { error: { message: 'Tên tài khoản đã tồn tại' } };
+    }
     
     const { error } = await supabase.auth.signUp({
       email,
@@ -49,14 +60,33 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
       options: {
         emailRedirectTo: redirectUrl,
         data: {
-          full_name: fullName
+          full_name: fullName,
+          username: username
         }
       }
     });
     return { error };
   };
 
-  const signIn = async (email: string, password: string) => {
+  const signIn = async (usernameOrEmail: string, password: string) => {
+    // Check if input is email or username
+    let email = usernameOrEmail;
+    
+    if (!usernameOrEmail.includes('@')) {
+      // It's a username, find the corresponding email
+      const { data: profile } = await supabase
+        .from('profiles')
+        .select('email')
+        .eq('username', usernameOrEmail)
+        .single();
+      
+      if (!profile) {
+        return { error: { message: 'Tên tài khoản không tồn tại' } };
+      }
+      
+      email = profile.email;
+    }
+
     const { error } = await supabase.auth.signInWithPassword({
       email,
       password
