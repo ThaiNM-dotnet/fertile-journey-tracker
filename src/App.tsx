@@ -14,8 +14,10 @@ import CustomerManagement from "./pages/CustomerManagement";
 import DoctorManagement from "./pages/DoctorManagement";
 import TreatmentServices from "./pages/TreatmentServices";
 import Dashboard from "./pages/Dashboard";
+import ManagerDashboard from "./pages/ManagerDashboard";
 import NotFound from "./pages/NotFound";
 import ProtectedRoute from "./components/ProtectedRoute";
+import RoleBasedRoute from "./components/RoleBasedRoute";
 
 const queryClient = new QueryClient();
 
@@ -35,6 +37,11 @@ const App = () => (
               <ProtectedRoute>
                 <Profile />
               </ProtectedRoute>
+            } />
+            <Route path="/manager" element={
+              <RoleBasedRoute allowedRoles={['manager', 'admin']}>
+                <ManagerDashboard />
+              </RoleBasedRoute>
             } />
             <Route path="/customers" element={<CustomerManagement />} />
             <Route path="/doctors" element={<DoctorManagement />} />

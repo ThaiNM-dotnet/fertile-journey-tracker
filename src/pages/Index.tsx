@@ -1,12 +1,12 @@
 
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { Heart, Users, Stethoscope, Calendar, Award, PhoneCall, User, LogOut, Clock, Shield } from "lucide-react";
+import { Heart, Users, Stethoscope, Calendar, Award, PhoneCall, User, LogOut, Clock, Shield, Settings } from "lucide-react";
 import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "@/hooks/useAuth";
 
 const Index = () => {
-  const { user, signOut } = useAuth();
+  const { user, userRole, signOut } = useAuth();
   const navigate = useNavigate();
 
   const handleSignOut = async () => {
@@ -32,6 +32,12 @@ const Index = () => {
             <div className="flex items-center space-x-3">
               {user ? (
                 <>
+                  {userRole === 'manager' && (
+                    <Button variant="outline" onClick={() => navigate("/manager")} className="border-pink-200 text-pink-600 hover:bg-pink-50">
+                      <Settings className="w-4 h-4 mr-2" />
+                      Quản lý
+                    </Button>
+                  )}
                   <Button variant="outline" onClick={() => navigate("/profile")} className="border-pink-200 text-pink-600 hover:bg-pink-50">
                     <User className="w-4 h-4 mr-2" />
                     {user.email}
