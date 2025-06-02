@@ -1,7 +1,7 @@
 
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { Heart, Users, Stethoscope, Calendar, Award, PhoneCall, User, LogOut } from "lucide-react";
+import { Heart, Users, Stethoscope, Calendar, Award, PhoneCall, User, LogOut, Clock, Shield } from "lucide-react";
 import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "@/hooks/useAuth";
 
@@ -23,28 +23,32 @@ const Index = () => {
               <Heart className="h-8 w-8 text-pink-600" />
               <h1 className="text-2xl font-bold text-gray-800">FertilityCare</h1>
             </div>
-            <nav className="hidden md:flex space-x-6">
-              <Link to="/" className="text-gray-600 hover:text-pink-600 transition-colors">Trang chủ</Link>
-              <Link to="/services" className="text-gray-600 hover:text-pink-600 transition-colors">Dịch vụ</Link>
-              <Link to="/doctors" className="text-gray-600 hover:text-pink-600 transition-colors">Bác sĩ</Link>
-              <Link to="/dashboard" className="text-gray-600 hover:text-pink-600 transition-colors">Dashboard</Link>
+            <nav className="hidden md:flex space-x-8">
+              <Link to="/" className="text-gray-700 hover:text-pink-600 transition-colors font-medium">Trang chủ</Link>
+              <Link to="/services" className="text-gray-700 hover:text-pink-600 transition-colors font-medium">Dịch vụ</Link>
+              <Link to="/doctors" className="text-gray-700 hover:text-pink-600 transition-colors font-medium">Về chúng tôi</Link>
+              <Link to="/dashboard" className="text-gray-700 hover:text-pink-600 transition-colors font-medium">Liên hệ</Link>
             </nav>
-            <div className="flex items-center space-x-4">
+            <div className="flex items-center space-x-3">
               {user ? (
                 <>
-                  <Button variant="outline" onClick={() => navigate("/profile")}>
+                  <Button variant="outline" onClick={() => navigate("/profile")} className="border-pink-200 text-pink-600 hover:bg-pink-50">
                     <User className="w-4 h-4 mr-2" />
                     {user.email}
                   </Button>
-                  <Button variant="ghost" onClick={handleSignOut}>
+                  <Button variant="ghost" onClick={handleSignOut} className="text-gray-600 hover:text-pink-600">
                     <LogOut className="w-4 h-4" />
                   </Button>
                 </>
               ) : (
-                <Button onClick={() => navigate("/auth")} className="bg-pink-600 hover:bg-pink-700">
-                  <User className="w-4 h-4 mr-2" />
-                  Đăng nhập
-                </Button>
+                <>
+                  <Button variant="outline" onClick={() => navigate("/auth")} className="border-pink-200 text-pink-600 hover:bg-pink-50">
+                    Đăng nhập
+                  </Button>
+                  <Button onClick={() => navigate("/auth")} className="bg-pink-600 hover:bg-pink-700 text-white">
+                    Đăng ký ngay
+                  </Button>
+                </>
               )}
             </div>
           </div>
@@ -53,21 +57,22 @@ const Index = () => {
 
       {/* Hero Section */}
       <section className="py-20 px-4">
-        <div className="container mx-auto text-center">
-          <h2 className="text-5xl font-bold text-gray-800 mb-6">
+        <div className="container mx-auto text-center max-w-4xl">
+          <h2 className="text-5xl font-bold text-gray-800 mb-6 leading-tight">
             Chăm sóc sức khỏe sinh sản
-            <span className="block text-pink-600">Với tình yêu thương</span>
+            <br />
+            <span className="text-pink-600">Với tình yêu thương</span>
           </h2>
-          <p className="text-xl text-gray-600 mb-8 max-w-2xl mx-auto">
-            Chúng tôi đồng hành cùng bạn trên hành trình tìm kiếm hạnh phúc làm cha mẹ với các phương pháp điều trị hiếm muộn tiên tiến nhất.
+          <p className="text-lg text-gray-600 mb-10 max-w-3xl mx-auto leading-relaxed">
+            Chúng tôi đồng hành cùng bạn trên hành trình tìm kiếm hạnh phúc. Đem 
+            đến những dịch vụ chăm sóc sức khỏe sinh sản tốt nhất dành cho bạn.
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <Button size="lg" className="bg-pink-600 hover:bg-pink-700" onClick={() => navigate("/consultation")}>
-              Tư vấn miễn phí
+            <Button size="lg" className="bg-pink-600 hover:bg-pink-700 text-white px-8 py-3 rounded-full" onClick={() => navigate("/consultation")}>
+              Tư vấn ngay
             </Button>
-            <Button size="lg" variant="outline" onClick={() => navigate("/booking")}>
-              <PhoneCall className="w-4 h-4 mr-2" />
-              Đặt lịch hẹn
+            <Button size="lg" variant="outline" className="border-pink-200 text-pink-600 hover:bg-pink-50 px-8 py-3 rounded-full" onClick={() => navigate("/booking")}>
+              Tìm hiểu thêm
             </Button>
           </div>
         </div>
@@ -79,45 +84,48 @@ const Index = () => {
           <h3 className="text-3xl font-bold text-center mb-12 text-gray-800">
             Dịch vụ điều trị hiếm muộn
           </h3>
-          <div className="grid md:grid-cols-3 gap-8">
-            <Card className="hover:shadow-lg transition-shadow">
-              <CardHeader>
-                <CardTitle className="flex items-center text-pink-600">
-                  <Heart className="w-6 h-6 mr-2" />
-                  IUI - Thụ tinh trong tử cung
-                </CardTitle>
+          <div className="grid md:grid-cols-3 gap-8 max-w-5xl mx-auto">
+            <Card className="hover:shadow-lg transition-all duration-300 border-0 shadow-md text-center p-6">
+              <CardHeader className="pb-4">
+                <div className="w-16 h-16 bg-pink-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                  <Heart className="w-8 h-8 text-pink-600" />
+                </div>
+                <CardTitle className="text-gray-800 text-xl">IUI - Thụ tinh trong tử cung</CardTitle>
               </CardHeader>
               <CardContent>
-                <CardDescription className="text-gray-600">
-                  Phương pháp đưa tinh trùng đã được xử lý trực tiếp vào tử cung để tăng khả năng thụ thai tự nhiên.
+                <CardDescription className="text-gray-600 leading-relaxed">
+                  Phương pháp hỗ trợ sinh sản đơn giản và hiệu quả, 
+                  giúp tăng khả năng thụ thai tự nhiên.
                 </CardDescription>
               </CardContent>
             </Card>
 
-            <Card className="hover:shadow-lg transition-shadow">
-              <CardHeader>
-                <CardTitle className="flex items-center text-pink-600">
-                  <Stethoscope className="w-6 h-6 mr-2" />
-                  IVF - Thụ tinh trong ống nghiệm
-                </CardTitle>
+            <Card className="hover:shadow-lg transition-all duration-300 border-0 shadow-md text-center p-6">
+              <CardHeader className="pb-4">
+                <div className="w-16 h-16 bg-pink-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                  <Users className="w-8 h-8 text-pink-600" />
+                </div>
+                <CardTitle className="text-gray-800 text-xl">IVF - Thụ tinh trong ống nghiệm</CardTitle>
               </CardHeader>
               <CardContent>
-                <CardDescription className="text-gray-600">
-                  Kỹ thuật thụ tinh ngoài cơ thể, sau đó chuyển phôi về tử cung với tỷ lệ thành công cao.
+                <CardDescription className="text-gray-600 leading-relaxed">
+                  Công nghệ tiên tiến nhất trong hỗ trợ sinh sản, 
+                  mang lại hy vọng cho các cặp vợ chồng hiếm muộn.
                 </CardDescription>
               </CardContent>
             </Card>
 
-            <Card className="hover:shadow-lg transition-shadow">
-              <CardHeader>
-                <CardTitle className="flex items-center text-pink-600">
-                  <Users className="w-6 h-6 mr-2" />
-                  Tư vấn chuyên sâu
-                </CardTitle>
+            <Card className="hover:shadow-lg transition-all duration-300 border-0 shadow-md text-center p-6">
+              <CardHeader className="pb-4">
+                <div className="w-16 h-16 bg-pink-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                  <Stethoscope className="w-8 h-8 text-pink-600" />
+                </div>
+                <CardTitle className="text-gray-800 text-xl">Tư vấn chuyên sâu</CardTitle>
               </CardHeader>
               <CardContent>
-                <CardDescription className="text-gray-600">
-                  Đội ngũ bác sĩ chuyên khoa sinh sản tư vấn và đưa ra phương án điều trị phù hợp nhất.
+                <CardDescription className="text-gray-600 leading-relaxed">
+                  Đội ngũ bác sĩ giàu kinh nghiệm tư vấn và đồng 
+                  hành cùng bạn trong hành trình làm cha mẹ.
                 </CardDescription>
               </CardContent>
             </Card>
@@ -125,43 +133,43 @@ const Index = () => {
         </div>
       </section>
 
-      {/* Features Section */}
+      {/* Why Choose Us Section */}
       <section className="py-16 px-4 bg-pink-50">
         <div className="container mx-auto">
           <h3 className="text-3xl font-bold text-center mb-12 text-gray-800">
             Tại sao chọn chúng tôi?
           </h3>
-          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
+          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8 max-w-6xl mx-auto">
             <div className="text-center">
-              <div className="bg-pink-100 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4">
+              <div className="bg-white w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4 shadow-md">
                 <Award className="w-8 h-8 text-pink-600" />
               </div>
-              <h4 className="font-semibold text-gray-800 mb-2">Đội ngũ chuyên gia</h4>
-              <p className="text-gray-600">Bác sĩ giàu kinh nghiệm với trình độ chuyên môn cao</p>
+              <h4 className="font-semibold text-gray-800 mb-2 text-lg">Đội ngũ chuyên gia</h4>
+              <p className="text-gray-600 leading-relaxed">Bác sĩ giàu kinh nghiệm với trình độ chuyên môn cao</p>
             </div>
 
             <div className="text-center">
-              <div className="bg-pink-100 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4">
-                <Stethoscope className="w-8 h-8 text-pink-600" />
+              <div className="bg-white w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4 shadow-md">
+                <Clock className="w-8 h-8 text-pink-600" />
               </div>
-              <h4 className="font-semibold text-gray-800 mb-2">Công nghệ tiên tiến</h4>
-              <p className="text-gray-600">Trang thiết bị y tế hiện đại và kỹ thuật mới nhất</p>
+              <h4 className="font-semibold text-gray-800 mb-2 text-lg">Công nghệ hiện đại</h4>
+              <p className="text-gray-600 leading-relaxed">Trang thiết bị y tế hiện đại và kỹ thuật mới nhất</p>
             </div>
 
             <div className="text-center">
-              <div className="bg-pink-100 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4">
-                <Calendar className="w-8 h-8 text-pink-600" />
+              <div className="bg-white w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4 shadow-md">
+                <Shield className="w-8 h-8 text-pink-600" />
               </div>
-              <h4 className="font-semibold text-gray-800 mb-2">Theo dõi liên tục</h4>
-              <p className="text-gray-600">Hệ thống quản lý và nhắc nhở lịch trình chi tiết</p>
+              <h4 className="font-semibold text-gray-800 mb-2 text-lg">Tỷ lệ thành công cao</h4>
+              <p className="text-gray-600 leading-relaxed">Hệ thống quản lý và nhắc nhở lịch trình chi tiết</p>
             </div>
 
             <div className="text-center">
-              <div className="bg-pink-100 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4">
+              <div className="bg-white w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4 shadow-md">
                 <Heart className="w-8 h-8 text-pink-600" />
               </div>
-              <h4 className="font-semibold text-gray-800 mb-2">Chăm sóc tận tâm</h4>
-              <p className="text-gray-600">Đồng hành và hỗ trợ suốt quá trình điều trị</p>
+              <h4 className="font-semibold text-gray-800 mb-2 text-lg">Chăm sóc tận tâm</h4>
+              <p className="text-gray-600 leading-relaxed">Đồng hành và hỗ trợ suốt quá trình điều trị</p>
             </div>
           </div>
         </div>
@@ -173,10 +181,10 @@ const Index = () => {
           <h3 className="text-3xl font-bold mb-4">
             Bắt đầu hành trình của bạn ngay hôm nay
           </h3>
-          <p className="text-xl mb-8 opacity-90">
+          <p className="text-xl mb-8 opacity-90 max-w-2xl mx-auto">
             Liên hệ với chúng tôi để được tư vấn miễn phí và lập kế hoạch điều trị phù hợp
           </p>
-          <Button size="lg" variant="secondary" className="bg-white text-pink-600 hover:bg-gray-100" onClick={() => navigate("/booking")}>
+          <Button size="lg" variant="secondary" className="bg-white text-pink-600 hover:bg-gray-100 px-8 py-3 rounded-full" onClick={() => navigate("/booking")}>
             Đặt lịch tư vấn ngay
           </Button>
         </div>
@@ -191,7 +199,7 @@ const Index = () => {
                 <Heart className="h-6 w-6 text-pink-400" />
                 <h4 className="text-xl font-bold">FertilityCare</h4>
               </div>
-              <p className="text-gray-400">
+              <p className="text-gray-400 leading-relaxed">
                 Trung tâm điều trị hiếm muộn hàng đầu với đội ngũ chuyên gia giàu kinh nghiệm.
               </p>
             </div>
